@@ -1,25 +1,26 @@
 #include<stdio.h>
 #include<math.h>
 #include<string.h>
+#define max 100
 int stack[15];
 int top=-1;
 void push(int x);
 int pop();
 void HexToBin();
-//void BinToHex();
+void BinToHex();
 //void HexToDec();
 void main()
 {
   int ch;
   do
   {
-    printf("\n\n1: Hexadecimal to Binary\n2: Binary to Hexadecimal\n3: Hexadecimal to Decimal\n");
+    printf("\n1: Hexadecimal to Binary\n2: Binary to Hexadecimal\n3: Hexadecimal to Decimal\n");
     scanf("%d",&ch);
     switch(ch)
     {
       case 1: HexToBin();
               break;
-      case 2: //BinToHex();
+      case 2: BinToHex();
               break;
       case 3: //HexToDec();
       default: printf("Error");
@@ -29,32 +30,45 @@ void main()
 
 void HexToBin()
 {
-  int d,r,c,i=0,b=0;
-  char hx[20];
-  printf("Enter hexadecimal number: ");
-  scanf("%s",&hx);
-  printf("The binary equivalent is: ");
+   char binaryNumber[max],hexaDecimal[max];
+   int d,r,i=0;
+   printf("Enter any hexadecimal number: ");
+   scanf("%s",hexaDecimal);
+   printf("\nEquivalent binary value: ");
+   while(hexaDecimal[i])
+   {
+      if('hexaDecimal[i]'>65&&'hexaDecimal[i]'<70)
+      switch(hexaDecimal[i])
+      {
+         case 'A': printf("1010");
+                   break;
+         case 'B': printf("1011");
+                   break;
+         case 'C': printf("1100");
+                   break;
+         case 'D': printf("1101");
+                   break;
+         case 'F': printf("1111");
+                   break;
+      }
+      else
+      {
+         d=hexaDecimal[i];
+         while(d>0)
+         {
+            r=d%2;
+            push(r);
+            d=d/2;
+         }
 
-  while(hx[i]!='\0')
-  {
-    c=0;
-    d=hx[i];
-    while(d>0)
-    {
-     r=d%2;
-     push(r);
-     d=d/2;
-     c++;
-    }
-    while(c<4)
-    {
-      push(0);
-    }
-    while(top>-1)
-    {
-     printf("%d",pop());
-    }
-  }
+         while(top>-1)
+         {
+            printf("%d",pop());
+         }
+      }
+
+      i++;
+   }
 }
 
 void push(int x)
@@ -65,25 +79,33 @@ int pop()
 {
    return stack[top--];
 }
-/*
+
 void BinToHex()
 {
-  int b,r,d=0,i=0;
-  char hx[20];
-  printf("Enter the binary number:");
-  scanf("%d",&b);
+   int hex[100],bin,i=1,j=0,rem,dec = 0;
 
-  while(b>0)
-  {
-   r=b%10;
-   if(r==1)
-     d=pow(2,i)+d;
-   i++;
-   b=b/10;
-  }
-
-
-
-  printf("The hexadecimal equivalent is: ");
-  printf("%s",hx);
-}*/
+   printf("Enter a Binary Number: ");
+   scanf("%d",&bin);
+   while(bin>0)
+   {
+      rem = bin % 2;
+      dec = dec + (rem*i);
+      i = i * 2;
+      bin = bin / 10;
+   }
+   i = 0;
+   while(dec!=0)
+   {
+      hex[i] = dec % 16;
+      dec = dec/16;
+      i++;
+   }
+   printf("Equivalent HexaDecimal value: ");
+   for(j=i-1;j>=0;j--)
+   {
+      if(hex[j]>9)
+        printf("%c",hex[j]+55);
+      else
+        printf("%d",hex[j]);
+   }
+}
