@@ -1,158 +1,138 @@
 #include<stdio.h>
-#include<math.h>
+#include<stdlib.h>
 #include<string.h>
-#define MAX 100
-int stack[15];
-int top=-1;
-void push(int x);
-int pop();
-void HexToBin();
-void BinToHex();
-void HexToDec();
-void DecToHex();
+#include<math.h>
+int binary_decimal(int);
+void decimal_hexadecimal(int);
+void decimal_octal(int);
+void decimal_binary(int);
+int hexadecimal_decimal(char []);
+int octal_decimal(int);
+
 char hex[]={'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
 void main()
 {
-  int ch;
-  do
-  {
-    printf("\n1: Hexadecimal to Binary\n2: Binary to Hexadecimal\n3: Hexadecimal to Decimal\n4: Decimal to Hexadecimal\n");
-    scanf("%d",&ch);
-    switch(ch)
+    int ch, num, dec, hex;
+    char n[100];
+    do
     {
-      case 1: HexToBin();
-              break;
-      case 2: BinToHex();
-              break;
-      case 3: HexToDec();
-              break;
-      case 4: DecToHex();
-              break;
-      default: printf("Error");
-    }
-  }while(ch);
+        printf("\n1. Binary to Decimal, Hexadecimal and Octal");
+        printf("\n2. Decimal to Binary");
+        printf("\n3. Hexadecimal to Binary");
+        printf("\n4. Octal to Binary");
+        printf("\n5. Exit");
+        printf("\n\nEnter your choice: ");
+        scanf("%d", &ch);
+        switch(ch)
+        {
+            case 1: printf("\nEnter a binary number: ");
+                    scanf("%d", &num);
+                    dec=binary_decimal(num);
+                    printf("\nIts decimal equivalent is %d", dec);
+                    decimal_hexadecimal(dec);
+                    decimal_octal(dec);
+                    break;
+            case 2: printf("\nEnter a decimal number: ");
+                    scanf("%d", &num);
+                    decimal_binary(num);
+                    break;
+            case 3: printf("\nEnter a hexadecimal number in CAPS: ");
+                    scanf("%s", n);
+                    decimal_binary(hexadecimal_decimal(n));
+                    break;
+            case 4: printf("\nEnter a octal number: ");
+                    scanf("%d", &num);
+                    decimal_binary(octal_decimal(num));
+            case 5: exit(0);
+            default:printf("\nINVALID ENTRY");
+        }
+    }while(ch);
 }
 
-void HexToBin()
+int binary_decimal(int n)
 {
-    char hexa[MAX];
-    long int i = 0;
-    printf("Enter the value for hexadecimal ");
-    scanf("%s", hexa);
-    printf("\n Equivalent binary value: ");
-    while(hexa[i])
+    int no=0, i=0;
+    while(n>0)
     {
-        switch (hexa[i])
-        {
-        case '0':
-            printf("0000"); break;
-        case '1':
-            printf("0001"); break;
-        case '2':
-            printf("0010"); break;
-        case '3':
-            printf("0011"); break;
-        case '4':
-            printf("0100"); break;
-        case '5':
-            printf("0101"); break;
-        case '6':
-            printf("0110"); break;
-        case '7':
-            printf("0111"); break;
-        case '8':
-            printf("1000"); break;
-        case '9':
-            printf("1001"); break;
-        case 'A':
-        case 'a':
-            printf("1010"); break;
-        case 'B':
-        case 'b':
-            printf("1011"); break;
-        case 'C':
-        case 'c':
-            printf("1100"); break;
-        case 'D':
-        case 'd':
-            printf("1101"); break;
-        case 'E':
-        case 'e':
-            printf("1110"); break;
-        case 'F':
-        case 'f':
-            printf("1111"); break;
-        default:
-            printf("\n Invalid hexa digit %c ", hexa[i]);
-            return 0;
-        }
+        no+=(n%10)*pow(2, i);
+        n=n/10;
         i++;
     }
+    return no;
 }
 
-void BinToHex()
+void decimal_hexadecimal(int n)
 {
-    long int binary, hexadecimal=0, i=1, remainder;
-    printf("Enter the binary number: ");
-    scanf("%ld", &binary);
-    while (binary!=0)
+    char D_H[30], i, j, rem;
+    for(i=0; n!=0; i++)
     {
-        remainder=binary%10;
-        hexadecimal=hexadecimal+remainder*i;
-        i=i*2;
-        binary=binary/10;
+        rem=n%16;
+        D_H[i]=hex[rem];
+        n/=16;
     }
-    printf("Equivalent hexadecimal value: %lX", hexadecimal);
-}
-
-void HexToDec()
-{
-    char hex[20];
-    int decimal,i = 0, val, len;
-
-    decimal = 0;
-
-    printf("Enter any hexadecimal number: ");
-    scanf("%s",&hex);
-
-    len = strlen(hex);
-    len--;
-
-    for(i=0; hex[i]!='\0'; i++)
-    {
-        if(hex[i]>='0' && hex[i]<='9')
-        {
-            val = hex[i] - 48;
-        }
-        else if(hex[i]>='a' && hex[i]<='f')
-        {
-            val = hex[i] - 97 + 10;
-        }
-        else if(hex[i]>='A' && hex[i]<='F')
-        {
-            val = hex[i] - 65 + 10;
-        }
-
-        decimal += val * pow(16, len);
-        len--;
-    }
-    printf("Decimal number = %d", decimal);
-}
-
-void DecToHex()
-{
-    int decimal;
-    char hexadecimal[30], i, j, rem;
-    printf("Enter the decimal value: ");
-    scanf("%d",&decimal);
-
-    for(i=0; decimal!=0; i++)
-    {
-        rem=decimal%16;
-        hexadecimal[i]=hex[rem];
-        decimal/=16;
-    }
-    printf("\nHexadecimal equivalent is ");
+    printf("\nIts hexadecimal equivalent is ");
     for(j=i-1; j>=0; j--)
-        printf("%c", hexadecimal[j]);
+        printf("%c", D_H[j]);
+}
+
+void decimal_octal(int n)
+{
+    char D_H[30], i, j, rem;
+    for(i=0; n!=0; i++)
+    {
+        rem=n%8;
+        D_H[i]=hex[rem];
+        n/=8;
+    }
+    printf("\nIts octal equivalent is ");
+    for(j=i-1; j>=0; j--)
+        printf("%c", D_H[j]);
+}
+
+int hexadecimal_decimal(char n[])
+{
+    int i, j=0, no=0, num[60];
+    for(i=0; i<strlen(n); i++)
+    {
+        if(n[i]=='A')
+            num[i]=10;
+        else if(n[i]=='B')
+            num[i]=11;
+        else if(n[i]=='C')
+            num[i]=12;
+        else if(n[i]=='D')
+            num[i]=13;
+        else if(n[i]=='E')
+            num[i]=14;
+        else if(n[i]=='F')
+            num[i]=15;
+        else
+            num[i]=(int)n[i]-48;
+    }
+    for(i=strlen(n)-1; i>=0; i--, j++)
+        no+=num[i]*pow(16, j);
+    return no;
+}
+
+void decimal_binary(int n)
+{
+    int D_B[40], i, j;
+    for(i=0; n>0; i++, n=n/2)
+        D_B[i]=n%2;
+    printf("\nIts binary equivalent is ");
+    for(j=i-1; j>=0; j--)
+        printf("%d ", D_B[j]);
+}
+
+int octal_decimal(int n)
+{
+    int no=0, i=0;
+    while(n>0)
+    {
+        no+=(n%10)*pow(8, i);
+        n=n/10;
+        i++;
+    }
+    return no;
 }
