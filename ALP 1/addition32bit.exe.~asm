@@ -1,0 +1,21 @@
+data segment
+a dd 0010h
+b dd 0020h
+c dd ?
+ends
+
+code segment
+start:  mov ax,data
+mov ds,ax
+mov ax,a
+add ax,b
+mov c,ax
+mov ah, 4ch
+int 21h
+ends
+end start
+
+
+
+
+; [SOURCE]: C:\users\student\Desktop\17CO28CO\ALP 1\addition32bit.asm
