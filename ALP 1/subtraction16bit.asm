@@ -1,0 +1,16 @@
+data segment
+    a dw 0020h
+    b dw 0010h
+    c dw ?
+ends
+
+code segment
+start:  mov ax,data
+        mov ds,ax
+        mov ax,a
+        sub ax,b
+        mov c,ax
+        mov ah, 4ch
+        int 21h  
+ends
+end start
