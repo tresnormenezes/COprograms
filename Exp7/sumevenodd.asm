@@ -8,7 +8,12 @@ INPUT MACRO
     MOV AH,01H
     INT 21H
 ENDM
-
+        
+OUTPUT MACRO
+    MOV DL, AL
+    MOV AH, 02H
+    INT 21H
+    
 DATA SEGMENT
      ARR DB 5 DUP(0)
      EVEN DB ?
@@ -29,14 +34,18 @@ START:  MOV AX, DATA
    TOP: INPUT    
         SUB AL,30H
         MOV [SI],AL 
-        LOOP TOP  
+        LOOP TOP       
+        
         
         MESSAGE MSG2
         MOV AL, EVEN
         ADD AL, 30H 
-        MOV DL, AL
-        MOV AH, 02H
-        INT 21H
+        OUTPUT
+        MESSAGE MSG3
+        MOV AL,ODD
+        ADD AL,30H
+        OUTPUT
+        
         MOV AH, 4CH
         INT 21H
 CODE ENDS
